@@ -8,20 +8,22 @@ import (
 	"github.com/poonaugust/sut-final-lab/backend/entity"
 )
 
-func TestEmployeeValidate(t *testing.T) {
+func TestSalaryValidate(t *testing.T) {
 	g := gomega.NewGomegaWithT(t)
 
-	t.Run("Is complete", func(t *testing.T) {
+	t.Run("Salary is invalid", func(t *testing.T) {
 		employee := entity.Employees{
 			Name:   "Poon",
-			Salary: 50000,
+			Salary: 250000,
 			EmployeeCode: "HR-1234",
 		}
 
 		ok, err := govalidator.ValidateStruct(employee)
 
-		g.Expect(ok).To(gomega.BeTrue())
-		g.Expect(err).To(gomega.BeNil())
+		g.Expect(ok).To(gomega.BeFalse())
+		g.Expect(err).ToNot(gomega.BeNil())
+
+		g.Expect(err.Error()).To(gomega.Equal("Salary must be between 15000 and 200000"))
 
 	})
 }
